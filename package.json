@@ -1,7 +1,7 @@
 {
   "name": "garmin-connect-workouts-mcp",
   "mcpName": "io.github.slaat/garmin-connect-workouts-mcp",
-  "version": "1.1.1",
+  "version": "1.1.2",
   "description": "MCP server that turns natural-language workout descriptions into structured Garmin Connect workouts, with pace/heart-rate/power/cadence targets and real repeat blocks.",
   "type": "module",
   "main": "dist/mcp-server.js",

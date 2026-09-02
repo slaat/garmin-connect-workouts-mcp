@@ -21,6 +21,10 @@ Exposes 8 MCP tools for the full Garmin Connect workout lifecycle:
 ## Architecture
 
 ```
+Dockerfile                  # Container build Glama.ai uses to run stdio introspection
+                             # (initialize/tools/list) and security checks - not part
+                             # of the npm package
+glama.json                  # Glama.ai server metadata (maintainers) for glama.ai listing
 src/
 ├── mcp-server.ts           # McpServer setup, zod-validated tool registration
 ├── garmin-auth.ts          # Browser login, session capture, validity probe

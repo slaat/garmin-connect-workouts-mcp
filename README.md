@@ -1,5 +1,7 @@
 # Garmin Connect Workouts MCP
 
+[![garmin-connect-workouts-mcp MCP server](https://glama.ai/mcp/servers/slaat/garmin-connect-workouts-mcp/badges/score.svg)](https://glama.ai/mcp/servers/slaat/garmin-connect-workouts-mcp)
+
 An MCP (Model Context Protocol) server that turns natural-language workout
 descriptions into structured workouts in Garmin Connect. Describe a session
 in plain English and the calling model builds a typed step-by-step workout
