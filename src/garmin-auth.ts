@@ -100,15 +100,23 @@ export class GarminAuth {
       mkdirSync(this.browserProfileDir, { recursive: true, mode: 0o700 });
     }
 
-    const browser = await puppeteer.launch({
-      headless: false,
-      userDataDir: this.browserProfileDir,
-      args: [
-        "--no-sandbox",
-        "--disable-setuid-sandbox",
-        "--disable-blink-features=AutomationControlled",
-      ],
-    });
+    let browser;
+    try {
+      browser = await puppeteer.launch({
+        headless: false,
+        userDataDir: this.browserProfileDir,
+        args: [
+          "--no-sandbox",
+          "--disable-setuid-sandbox",
+          "--disable-blink-features=AutomationControlled",
+        ],
+      });
+    } catch (error) {
+      console.error("❌ Failed to launch browser for Garmin login:", error);
+      throw new Error(
+        "No browser available for the Garmin login. Authentication opens a real Chrome window, so it only works where the server runs locally (e.g. `claude mcp add garmin-workouts npx garmin-connect-workouts-mcp`) - hosted or containerized environments cannot run it. If you ARE running locally and see this, install Puppeteer's browser with: npx puppeteer browsers install chrome"
+      );
+    }
 
     let authData: AuthData | null = null;
 

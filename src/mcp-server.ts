@@ -8,7 +8,7 @@ import { GarminClient } from "./garmin/client.js";
 import { sportSchema, stepSchema, workoutDataSchema, type WorkoutData } from "./workout/types.js";
 
 const server = new McpServer(
-  { name: "garmin-connect-workouts", version: "1.1.2" },
+  { name: "garmin-connect-workouts", version: "1.1.3" },
   { capabilities: { tools: {} } }
 );
 
