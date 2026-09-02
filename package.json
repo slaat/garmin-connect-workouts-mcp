@@ -1,0 +1,55 @@
+{
+  "name": "garmin-connect-workouts-mcp",
+  "version": "1.0.0",
+  "description": "MCP server that turns natural-language workout descriptions into structured Garmin Connect workouts, with pace/heart-rate/power/cadence targets and real repeat blocks.",
+  "type": "module",
+  "main": "dist/mcp-server.js",
+  "bin": {
+    "garmin-connect-workouts-mcp": "dist/mcp-server.js"
+  },
+  "files": [
+    "dist/**/*",
+    "README.md",
+    "LICENSE"
+  ],
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsx src/mcp-server.ts",
+    "prepublishOnly": "pnpm run build",
+    "test": "vitest run",
+    "test:watch": "vitest"
+  },
+  "keywords": [
+    "garmin",
+    "workout",
+    "mcp",
+    "claude",
+    "fitness",
+    "training",
+    "garmin-connect"
+  ],
+  "author": "Christoph Salat",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/slaat/garmin-connect-workouts-mcp.git"
+  },
+  "bugs": {
+    "url": "https://github.com/slaat/garmin-connect-workouts-mcp/issues"
+  },
+  "homepage": "https://github.com/slaat/garmin-connect-workouts-mcp#readme",
+  "license": "MIT",
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.30.0",
+    "puppeteer": "^25.9.0",
+    "zod": "^3.25.76"
+  },
+  "devDependencies": {
+    "@types/node": "^26.4.1",
+    "tsx": "^4.23.13",
+    "typescript": "^5.9.3",
+    "vitest": "^4.1.11"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}
