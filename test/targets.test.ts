@@ -84,4 +84,20 @@ describe("encodeTarget", () => {
   it("rejects a reversed bpm range", () => {
     expect(() => encodeTarget({ type: "hrBpm", low: 160, high: 140 })).toThrow(/must not exceed/);
   });
+
+  it("encodes power on power.zone ascending, low first, with no zoneNumber", () => {
+    // Verified by live round-trip against Garmin on 2026-09-02: targetValueOne
+    // 200 / targetValueTwo 250 (ascending) and zoneNumber null came back
+    // verbatim for a cycling workout.
+    const encoded = encodeTarget({ type: "power", low: 200, high: 250 });
+    expect(encoded.targetType.workoutTargetTypeId).toBe(2);
+    expect(encoded.targetType.workoutTargetTypeKey).toBe("power.zone");
+    expect(encoded.targetValueOne).toBe(200);
+    expect(encoded.targetValueTwo).toBe(250);
+    expect(encoded.zoneNumber).toBeUndefined();
+  });
+
+  it("rejects a reversed power range", () => {
+    expect(() => encodeTarget({ type: "power", low: 250, high: 200 })).toThrow(/must not exceed/);
+  });
 });

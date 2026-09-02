@@ -14,16 +14,15 @@ const METRES_PER_UNIT = {
 /**
  * Garmin's workoutTargetType table.
  *
- * `none`, `cadence`, `heartRate` and `pace` are confirmed against real payloads
- * captured from Garmin's own web client. `power` is NOT yet confirmed - it is
- * inferred from the FIT SDK ordering and needs a captured cycling workout
- * before it should be trusted. See the spec, section 4.5.
+ * `none`, `cadence`, `heartRate`, `pace` and `power` are all confirmed against
+ * real payloads. `power` was verified by a live round-trip against Garmin on
+ * 2026-09-02: a cycling workout with targetValueOne 200 / targetValueTwo 250
+ * (ascending, low first) and zoneNumber null came back verbatim.
  */
 const TARGET_TYPES = {
   none: { workoutTargetTypeId: 1, workoutTargetTypeKey: "no.target", displayOrder: 1 },
   cadence: { workoutTargetTypeId: 3, workoutTargetTypeKey: "cadence", displayOrder: 3 },
   heartRate: { workoutTargetTypeId: 4, workoutTargetTypeKey: "heart.rate.zone", displayOrder: 4 },
-  /** UNVERIFIED - see note above. */
   power: { workoutTargetTypeId: 2, workoutTargetTypeKey: "power.zone", displayOrder: 2 },
   pace: { workoutTargetTypeId: 6, workoutTargetTypeKey: "pace.zone", displayOrder: 6 },
 } as const;

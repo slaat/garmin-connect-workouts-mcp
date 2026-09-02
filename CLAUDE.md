@@ -87,9 +87,9 @@ without a captured payload proving the correction.
 - **Custom bpm rides on `heart.rate.zone` (id 4), not a separate type.** A
   bpm range and a named zone share `workoutTargetTypeId: 4`; the
   distinguishing feature is `targetValueOne`/`targetValueTwo` bounds instead
-  of `zoneNumber`. `power.zone` (id 2) is the one target type NOT yet
-  confirmed against a real captured payload - it's inferred from FIT SDK
-  ordering and carries an `UNVERIFIED` marker comment in `targets.ts`.
+  of `zoneNumber`. `power.zone` (id 2) is confirmed by live round-trip
+  (2026-09-02): targetValueOne/Two ascend low-then-high (unlike pace) and
+  `zoneNumber` is null.
 - **Repeat groups are `RepeatGroupDTO`, not flattened steps.** stepType is
   `{6, "repeat"}`, endCondition is `{7, "iterations"}`, `smartRepeat: false`,
   `skipLastRestStep: false`. `stepOrder` is a single counter that runs across
@@ -98,6 +98,22 @@ without a captured payload proving the correction.
 - **A single stated pace is widened, not sent as a point.** Garmin can't
   store a bare pace target - only a range - so a caller giving just `fast`
   gets `slow` computed as 10 seconds/unit slower.
+- **Swimming is `sportTypeId: 4`, not 5.** Captured via live round-trip
+  (2026-09-02): `{sportTypeId: 4, sportTypeKey: "swimming", displayOrder: 3}`.
+  Id 5 (this codebase's earlier value) is stored by Garmin as
+  strength_training - a real bug fixed in `payload.ts`.
+- **Stroke and equipment are step-level, pool length is workout-level.**
+  Step `strokeType` table (id, key, displayOrder = id): 1 any_stroke,
+  2 backstroke, 3 breaststroke, 4 drill, 5 fly, 6 free, 7 individual_medley.
+  Step `equipmentType` table: 1 fins, 2 kickboard, 3 paddles, 4 pull_buoy,
+  5 snorkel (id 6 does not exist; Garmin normalizes an unrecognized id to 0).
+  `poolLength` and `poolLengthUnit` live on the top-level workout payload, not
+  the segment - segment-level `poolLength`/`poolLengthUnit` are ignored and
+  come back `null`. `poolLengthUnit` is a full object:
+  meter = `{unitId: 1, unitKey: "meter", factor: 100}`, yard =
+  `{unitId: 230, unitKey: "yard", factor: 91.44}`. Steps without a
+  stroke/equipment omit the fields entirely rather than sending Garmin's
+  `{id: 0, key: null}` shape. Captured via live round-trip (2026-09-02).
 
 ## Development
 
@@ -116,8 +132,7 @@ Tests assert against those fixtures directly (golden-file style) rather than
 only against hand-written expected values, so a change to field names,
 ordering, or encoding that Garmin would actually reject gets caught. When
 adding a new target or duration type, capture a real payload before trusting
-the encoding - see the `UNVERIFIED` marker on `power.zone` for what an
-unconfirmed one looks like.
+the encoding.
 
 ## File Structure Notes
 

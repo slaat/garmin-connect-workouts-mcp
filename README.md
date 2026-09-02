@@ -13,6 +13,10 @@ directly in your account.
   Garmin's real `workoutTargetType` table.
 - **Real repeat blocks** - `5x1km` becomes a single repeat group, not five
   duplicated steps, so the watch shows an actual rep counter.
+- **Swim workouts** - per-step strokes (freestyle, backstroke, breaststroke,
+  fly, drill, individual medley, or any stroke) and equipment (fins,
+  kickboard, paddles, pull buoy, snorkel), plus a workout-level pool length
+  in meters or yards.
 - **Full workout lifecycle** - create, list, get, update, delete, and
   schedule workouts onto the Garmin Connect calendar.
 - **Structured input, not text parsing** - the server never parses free text
@@ -90,6 +94,8 @@ personal browser profile.
   already have scheduled this week"
 - "Update workout 123456 to add a 5 minute cooldown, then schedule it for
   next Monday"
+- "Create a 25m pool swim: 200m warmup any stroke, 4x100m freestyle with 30s
+  rest using a kickboard, 100m breaststroke cooldown"
 
 ## How targets work
 

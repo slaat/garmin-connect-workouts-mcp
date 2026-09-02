@@ -110,6 +110,26 @@ export type Target = z.infer<typeof targetSchema>;
  * zod can't infer a self-referential discriminated union's element type on
  * its own.
  */
+export const strokeSchema = z.enum([
+  "any",
+  "backstroke",
+  "breaststroke",
+  "drill",
+  "fly",
+  "free",
+  "im",
+]);
+export type Stroke = z.infer<typeof strokeSchema>;
+
+export const equipmentSchema = z.enum([
+  "fins",
+  "kickboard",
+  "paddles",
+  "pull_buoy",
+  "snorkel",
+]);
+export type Equipment = z.infer<typeof equipmentSchema>;
+
 export interface SingleStep {
   kind: "step";
   name?: string;
@@ -117,6 +137,8 @@ export interface SingleStep {
   duration: Duration;
   target?: Target;
   notes?: string;
+  stroke?: Stroke;
+  equipment?: Equipment;
 }
 
 export interface RepeatStep {
@@ -134,6 +156,16 @@ const singleStepSchema = z.object({
   duration: durationSchema,
   target: targetSchema.optional(),
   notes: z.string().optional().describe("Free-text note shown on the watch."),
+  stroke: strokeSchema
+    .optional()
+    .describe(
+      "Swimming only - the stroke for this step. 'any' = any stroke, 'im' = individual medley. Only valid when the workout's sport is 'swimming'."
+    ),
+  equipment: equipmentSchema
+    .optional()
+    .describe(
+      "Swimming only - equipment used for this step (fins, kickboard, paddles, pull_buoy, snorkel). Only valid when the workout's sport is 'swimming'."
+    ),
 });
 
 export const stepSchema: z.ZodType<Step> = z.lazy(() =>
@@ -158,5 +190,18 @@ export const workoutDataSchema = z.object({
   name: z.string(),
   sport: sportSchema.default("running"),
   steps: z.array(stepSchema).min(1),
+  poolLength: z
+    .number()
+    .positive()
+    .optional()
+    .describe(
+      "Swimming only - pool length for this workout, e.g. 25. Only valid when sport is 'swimming'."
+    ),
+  poolLengthUnit: z
+    .enum(["m", "yd"])
+    .optional()
+    .describe(
+      "Swimming only - unit for poolLength. Defaults to 'm' when poolLength is given without a unit."
+    ),
 });
 export type WorkoutData = z.infer<typeof workoutDataSchema>;

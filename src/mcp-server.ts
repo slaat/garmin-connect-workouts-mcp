@@ -5,10 +5,10 @@ import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js";
 import { GarminAuth } from "./garmin-auth.js";
 import { GarminClient } from "./garmin/client.js";
-import { sportSchema, stepSchema, type WorkoutData } from "./workout/types.js";
+import { sportSchema, stepSchema, workoutDataSchema, type WorkoutData } from "./workout/types.js";
 
 const server = new McpServer(
-  { name: "garmin-connect-workouts", version: "1.0.1" },
+  { name: "garmin-connect-workouts", version: "1.1.0" },
   { capabilities: { tools: {} } }
 );
 
@@ -22,6 +22,8 @@ const stepsField = z
   .array(stepSchema)
   .min(1)
   .describe("The ordered list of steps and repeat blocks that make up the workout.");
+const poolLengthField = workoutDataSchema.shape.poolLength;
+const poolLengthUnitField = workoutDataSchema.shape.poolLengthUnit;
 
 const text = (body: string) => ({ content: [{ type: "text" as const, text: body }] });
 
@@ -52,11 +54,13 @@ server.registerTool(
   "create_garmin_workout",
   {
     description:
-      "Create a structured workout in Garmin Connect. Supports pace, heart-rate zone, explicit bpm, power and cadence targets, and real repeat blocks for intervals.",
+      "Create a structured workout in Garmin Connect. Supports pace, heart-rate zone, explicit bpm, power and cadence targets, real repeat blocks for intervals, and swim workouts with per-step strokes, equipment, and pool length.",
     inputSchema: {
       name: z.string().describe("Workout name."),
       sport: sportSchema.default("running"),
       steps: stepsField,
+      poolLength: poolLengthField,
+      poolLengthUnit: poolLengthUnitField,
     },
     annotations: { title: "Create Garmin workout" },
   },
@@ -117,6 +121,8 @@ server.registerTool(
       name: z.string().describe("Workout name."),
       sport: sportSchema,
       steps: stepsField,
+      poolLength: poolLengthField,
+      poolLengthUnit: poolLengthUnitField,
     },
     annotations: { title: "Update Garmin workout", idempotentHint: true },
   },
