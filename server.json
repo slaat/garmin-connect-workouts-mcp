@@ -1,0 +1,21 @@
+{
+  "$schema": "https://static.modelcontextprotocol.io/schemas/2025-09-29/server.schema.json",
+  "name": "io.github.slaat/garmin-connect-workouts-mcp",
+  "description": "Create structured Garmin Connect workouts from natural language - pace/HR/power/cadence targets, repeat blocks, swim strokes and pool lengths.",
+  "repository": {
+    "url": "https://github.com/slaat/garmin-connect-workouts-mcp",
+    "source": "github"
+  },
+  "version": "1.1.1",
+  "packages": [
+    {
+      "registryType": "npm",
+      "registryBaseUrl": "https://registry.npmjs.org",
+      "identifier": "garmin-connect-workouts-mcp",
+      "version": "1.1.1",
+      "transport": {
+        "type": "stdio"
+      }
+    }
+  ]
+}
