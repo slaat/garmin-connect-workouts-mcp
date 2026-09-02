@@ -50,7 +50,12 @@ test/
   else in this server rather than the SDK's default `isError` envelope.
 - **Auth (`src/garmin-auth.ts`)**: drives a real browser login via Puppeteer
   and captures the resulting session; exports `garminHeaders()`, the minimal
-  header set Garmin accepts.
+  header set Garmin accepts. The login browser launches with a persistent,
+  isolated `userDataDir` at
+  `~/.config/garmin-connect-workouts-mcp/browser-profile` (mode `0o700`,
+  created on demand) so Garmin's own device-trust cookies survive between
+  logins - it is never the user's personal browser profile, and `clearAuth()`
+  never deletes it (only `auth.json`).
 - **Workout encoding (`src/workout/`)**: pure functions, no I/O. `types.ts`
   defines the accepted shape; `targets.ts` and `duration.ts` encode individual
   fields; `payload.ts` assembles the full Garmin payload including repeat-group

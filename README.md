@@ -63,7 +63,10 @@ you create a workout (or whenever the session has expired):
 No password is ever stored - only the resulting session cookies and CSRF
 token. Garmin sessions expire, so you may be prompted to re-authenticate
 between sessions; the server detects this automatically and tells you when
-to run `authenticate_garmin` again.
+to run `authenticate_garmin` again. The login browser uses a persistent,
+isolated profile under `~/.config/garmin-connect-workouts-mcp/browser-profile/`
+so Garmin can remember the device across logins - it never touches your
+personal browser profile.
 
 ## Tools
 

@@ -40,10 +40,12 @@ export function garminHeaders(auth: AuthData, extra: Record<string, string> = {}
 export class GarminAuth {
   private configDir: string;
   private authFile: string;
+  private browserProfileDir: string;
 
   constructor() {
     this.configDir = join(homedir(), ".config", "garmin-connect-workouts-mcp");
     this.authFile = join(this.configDir, "auth.json");
+    this.browserProfileDir = join(this.configDir, "browser-profile");
 
     if (!existsSync(this.configDir)) {
       mkdirSync(this.configDir, { recursive: true });
@@ -91,8 +93,16 @@ export class GarminAuth {
   async authenticate(): Promise<AuthData | null> {
     console.error("🚀 Starting Garmin authentication...");
 
+    // A persistent, isolated profile (never the user's personal browser) lets
+    // Garmin's own "remember me"/device-trust cookies survive between runs,
+    // so a re-login usually doesn't require full credential entry again.
+    if (!existsSync(this.browserProfileDir)) {
+      mkdirSync(this.browserProfileDir, { recursive: true, mode: 0o700 });
+    }
+
     const browser = await puppeteer.launch({
       headless: false,
+      userDataDir: this.browserProfileDir,
       args: [
         "--no-sandbox",
         "--disable-setuid-sandbox",
